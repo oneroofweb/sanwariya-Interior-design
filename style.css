@@ -156,18 +156,43 @@ a { text-decoration: none; color: inherit; }
         Hero Section
    ============================================== */
 
+/* ==============================================
+        Hero Section (With Vimeo Video Background)
+   ============================================== */
 .hero-section {
     position: relative;
-    /* height: 100vh; <-- IS LINE KO HATA DIYA HAI */
-    min-height: 100vh; /* Agar content bada hoga toh section apne aap stretch ho jayega */
-    padding-top: 100px; /* Upar header ke liye safe space */
+    min-height: 100vh; /* Content bada hone par stretch hoga */
+    padding-top: 150px; /* Upar header ke liye safe space */
     padding-bottom: 100px; /* Neeche se button ko bahar jaane se rokega */
-    
-    /* Aapki actual image URL yahan rahegi */
-    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-    
     display: flex;
     align-items: center;
+    overflow: hidden; /* Bahut Zaroori: Video ko section se bahar nikalne se rokega */
+    /* Background image yahan se hata di gayi hai kyunki ab video lagega */
+}
+
+/* Video Wrapper */
+.hero-video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Sabse piche rahega */
+    overflow: hidden;
+    pointer-events: none; /* User iframe par click ya pause nahi kar payega */
+}
+
+/* Perfect Iframe Scaling (16:9 Aspect Ratio Trick) */
+.hero-video-bg iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 16:9 Aspect Ratio (9/16 = 0.5625) */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 16:9 Aspect Ratio (16/9 = 1.7777) */
+    transform: translate(-50%, -50%); /* Video ko humesha center me rakhega */
+    object-fit: cover;
 }
 
 .hero-overlay {
@@ -177,12 +202,12 @@ a { text-decoration: none; color: inherit; }
     width: 100%;
     height: 100%;
     background: var(--overlay-dark);
-    z-index: 1;
+    z-index: 1; /* Video ke upar, content ke piche */
 }
 
 .hero-content-wrapper {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Text aur buttons sabse aage rahenge */
     width: 100%;
 }
 
@@ -207,7 +232,7 @@ a { text-decoration: none; color: inherit; }
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 2; /* Social icons bhi aage rahenge */
     display: flex;
     gap: 20px;
     width: 100%;
@@ -225,7 +250,7 @@ a { text-decoration: none; color: inherit; }
     transform: translateY(-3px);
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 992px) {
     .nav-list { gap: 15px; }
 }
@@ -1514,4 +1539,20 @@ a { text-decoration: none; color: inherit; }
     .brand-col {
         grid-column: span 1;
     }
+}
+
+/* ==============================================
+        SCROLL REVEAL ANIMATIONS
+   ============================================== */
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-80px); /* Content initially left side me 80px shift rahega */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: opacity, transform; /* Performance optimization ke liye */
+}
+
+/* Jab JS ye class add karega, tab animation trigger hoga */
+.fade-in-left.show {
+    opacity: 1;
+    transform: translateX(0); /* Wapas original position par aayega */
 }
